@@ -1,0 +1,197 @@
+name: fpp-enkf-conus
+version: 1.1
+cabal-version: >=1.10
+build-type: Simple
+license: none
+license-file: LICENSE
+copyright: none
+maintainer: 
+synopsis: Forecast post-processing utilities
+description:
+    The enkf_conus (4k) post-processing software. This includes ctl file generation, index file generation, grad script execution and file post.
+author: Dino Morelli
+tested-with: GHC >= 8.0.1
+data-files:
+    resources/enkf_conus.config
+    resources/enkf_conus.wrfprs.ctl.template
+    resources/grads/*.gs
+    resources/grads-param
+    resources/grads-region
+    resources/grads_tools/*.asc
+    resources/grads_tools/*.gs
+    resources/grads_tools/*.dbf
+    resources/grads_tools/*.prj
+    resources/grads_tools/*.README.html
+    resources/grads_tools/*.shp
+    resources/grads_tools/*.shp.dbf
+    resources/grads_tools/*.shp.prj
+    resources/grads_tools/*.shp.sbn
+    resources/grads_tools/*.shp.sbx
+    resources/grads_tools/*.shp.shp
+    resources/grads_tools/*.shp.shx
+    resources/grads_tools/*.shp.txt
+    resources/grads_tools/*.shp.xml
+    resources/grads_tools/*.shx
+    resources/grads_tools/*.txt
+    resources/grads_tools/*.VERSION.txt
+    resources/grads_tools/*.zip
+    resources/modulefiles/fpp-enkf_conus
+extra-source-files:
+    README.md
+    util/enkf_conus-ctl.sh
+    util/enkf_conus-filepost.sh
+    util/enkf_conus-grads.sh
+    util/img-resize.sh
+    util/install.hs
+
+executable fpp-ctl
+    main-is: fpp-ctl.hs
+    build-depends:
+        base >= 3 && < 5,
+        containers -any,
+        directory -any,
+        exceptions -any,
+        filepath -any,
+        hsinstall,
+        hslogger -any,
+        HTTP -any,
+        mtl -any,
+        process -any,
+        regex-compat -any,
+        safe -any,
+        time -any,
+        unix -any
+    default-language: Haskell2010
+    hs-source-dirs: src
+    other-modules:
+        PWS.HPC.Common.Data.Time
+        PWS.HPC.EnkfConus.Config
+        PWS.HPC.EnkfConus.CtlIdx.CtlFile
+        PWS.HPC.EnkfConus.CtlIdx.IdxFile
+        PWS.HPC.EnkfConus.CtlIdx.ItagFile
+        PWS.HPC.EnkfConus.FilePost.Rest
+        PWS.HPC.EnkfConus.Log
+        PWS.HPC.EnkfConus.Time
+        PWS.HPC.EnkfConus.Trans
+        PWS.HPC.EnkfConus.Types
+        PWS.HPC.EnkfConus.Util
+        PWS.HPC.EnkfConus.WorkingDir
+    ghc-options: -Wall
+
+executable fpp-grads
+    main-is: fpp-grads.hs
+    build-depends:
+        base >= 3 && < 5,
+        containers -any,
+        directory -any,
+        exceptions -any,
+        filepath -any,
+        hsinstall,
+        hslogger -any,
+        mtl -any,
+        parallel-io -any,
+        process -any,
+        safe -any,
+        time -any,
+        unix -any
+    default-language: Haskell2010
+    hs-source-dirs: src
+    other-modules:
+        PWS.HPC.Common.Data.Time
+        PWS.HPC.EnkfConus.Config
+        PWS.HPC.EnkfConus.CtlIdx.CtlFile
+        PWS.HPC.EnkfConus.Grads.Commands
+        PWS.HPC.EnkfConus.Grads.Param
+        PWS.HPC.EnkfConus.Grads.Region
+        PWS.HPC.EnkfConus.Grads.ResizeImages
+        PWS.HPC.EnkfConus.Grads.Run
+        PWS.HPC.EnkfConus.Log
+        PWS.HPC.EnkfConus.Time
+        PWS.HPC.EnkfConus.Trans
+        PWS.HPC.EnkfConus.Types
+        PWS.HPC.EnkfConus.Util
+        PWS.HPC.EnkfConus.WorkingDir
+    ghc-options: -Wall -threaded -rtsopts
+
+executable fpp-filepost
+    main-is: fpp-filepost.hs
+    build-depends:
+        base >= 3 && < 5,
+        containers -any,
+        directory -any,
+        exceptions -any,
+        filepath -any,
+        hsinstall,
+        hslogger -any,
+        HTTP -any,
+        mtl -any,
+        parallel-io -any,
+        process -any,
+        regex-compat -any,
+        safe -any,
+        time -any,
+        unix -any
+    default-language: Haskell2010
+    hs-source-dirs: src
+    other-modules:
+        PWS.HPC.Common.Data.Time
+        PWS.HPC.EnkfConus.Config
+        PWS.HPC.EnkfConus.FilePost.Copy
+        PWS.HPC.EnkfConus.FilePost.Rest
+        PWS.HPC.EnkfConus.Grads.Param
+        PWS.HPC.EnkfConus.Grads.Region
+        PWS.HPC.EnkfConus.Log
+        PWS.HPC.EnkfConus.Time
+        PWS.HPC.EnkfConus.Trans
+        PWS.HPC.EnkfConus.Types
+        PWS.HPC.EnkfConus.Util
+        PWS.HPC.EnkfConus.WorkingDir
+    ghc-options: -Wall -threaded -rtsopts
+
+executable simulate
+    main-is: simulate.hs
+    build-depends:
+        base >= 3 && < 5,
+        filepath -any,
+        process -any
+    default-language: Haskell2010
+    hs-source-dirs: src
+    other-modules:
+        PWS.HPC.EnkfConus.Simulate.Opts
+        PWS.HPC.EnkfConus.Types
+    ghc-options: -Wall
+
+test-suite test-main
+    type: exitcode-stdio-1.0
+    main-is: test-main.hs
+    build-depends:
+        base >=3 && <5,
+        containers -any,
+        directory -any,
+        exceptions -any,
+        filepath -any,
+        hsinstall,
+        hslogger -any,
+        HTTP -any,
+        HUnit -any,
+        mtl -any,
+        parallel-io -any,
+        safe -any,
+        regex-compat -any,
+        time -any,
+        unix -any
+    default-language: Haskell2010
+    hs-source-dirs: src testsuite
+    other-modules:
+      Grads
+      PWS.HPC.EnkfConus.Config
+      PWS.HPC.EnkfConus.CtlIdx.CtlFile
+      PWS.HPC.EnkfConus.Grads.Commands
+      PWS.HPC.EnkfConus.Grads.Param
+      PWS.HPC.EnkfConus.Grads.Region
+      PWS.HPC.EnkfConus.Log
+      PWS.HPC.EnkfConus.Time
+      PWS.HPC.EnkfConus.Trans
+      PWS.HPC.EnkfConus.Types
+      PWS.HPC.EnkfConus.Util
+    ghc-options: -Wall

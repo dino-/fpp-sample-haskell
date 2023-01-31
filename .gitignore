@@ -1,0 +1,15 @@
+# Vim swap files
+*.sw?
+
+# Haskell cabal-install artifacts
+#.cabal-sandbox
+#cabal.sandbox.config
+
+# Build artifacts
+#dist
+
+# stack build files
+.stack-work
+
+# Job scheduling
+slurm-*.out
