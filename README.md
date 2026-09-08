@@ -1,4 +1,4 @@
-# fpp-enkf_conus
+# fpp-sample-haskell
 
 
 ## Synopsis
